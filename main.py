@@ -18,7 +18,10 @@ class App:
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        pass
+        mario.move()
+        luigi.move()
+        paquete.move()
+        paquete.cambiarAltura(mario, luigi)
 
     def draw(self):
         pyxel.cls(0)
