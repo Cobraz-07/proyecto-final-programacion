@@ -1,0 +1,15 @@
+**/pycache/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+env/
+venv/
+ENV/
+.venv/
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+*.bak   
