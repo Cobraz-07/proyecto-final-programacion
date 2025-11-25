@@ -57,6 +57,10 @@ class Paquete:
             self.pos_x = 170
             while self.pos_y < 131:
                 self.pos_y += self.speed
+        elif self.pos_y == self.altura5 and self.pos_x == 82 and luigi.posicion == 3:
+            luigi.interactuar()
+            self.pos_y = 69
+            self.pos_x = 10
 
     def draw(self):
         if self.pos_y == self.altura1 and self.pos_x >= 118:
@@ -77,7 +81,7 @@ class Paquete:
             self.pos_y == self.altura4 or self.pos_y == self.altura5
         ) and self.pos_x >= 118:
             pyxel.blt(self.pos_x, self.pos_y, 0, 64, 16, 16, 16, 0)
-        elif self.pos_y == self.altura5 and self.pos_x < 118:
-            pyxel.blt(self.pos_x, self.pos_y, 0, 64, 32, 16, 16, 0)
         elif self.pos_y == 131:
             pyxel.blt(self.pos_x, self.pos_y, 0, 80, 0, 16, 16, 0)
+        else:
+            pyxel.blt(self.pos_x, self.pos_y, 0, 64, 32, 16, 16, 0)
