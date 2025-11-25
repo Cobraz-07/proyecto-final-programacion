@@ -13,3 +13,5 @@ ENV/
 *.swp
 *.swo
 *.bak   
+clases/sprites/objetos/__pycache__/paquete.cpython-312.pyc
+clases/sprites/personajes/__pycache__/mario.cpython-312.pyc
