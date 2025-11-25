@@ -1,5 +1,4 @@
 import pyxel
-import time
 
 
 class Paquete:
@@ -60,4 +59,25 @@ class Paquete:
                 self.pos_y += self.speed
 
     def draw(self):
-        pyxel.blt(self.pos_x, self.pos_y, 0, 48, 0, 16, 16, 0)
+        if self.pos_y == self.altura1 and self.pos_x >= 118:
+            pyxel.blt(self.pos_x, self.pos_y, 0, 48, 0, 16, 16, 0)
+        elif (
+            self.pos_y == self.altura1 or self.pos_y == self.altura2
+        ) and self.pos_x < 118:
+            pyxel.blt(self.pos_x, self.pos_y, 0, 48, 16, 16, 16, 0)
+        elif (
+            self.pos_y == self.altura2 or self.pos_y == self.altura3
+        ) and self.pos_x >= 118:
+            pyxel.blt(self.pos_x, self.pos_y, 0, 48, 32, 16, 16, 0)
+        elif (
+            self.pos_y == self.altura3 or self.pos_y == self.altura4
+        ) and self.pos_x < 118:
+            pyxel.blt(self.pos_x, self.pos_y, 0, 64, 0, 16, 16, 0)
+        elif (
+            self.pos_y == self.altura4 or self.pos_y == self.altura5
+        ) and self.pos_x >= 118:
+            pyxel.blt(self.pos_x, self.pos_y, 0, 64, 16, 16, 16, 0)
+        elif self.pos_y == self.altura5 and self.pos_x < 118:
+            pyxel.blt(self.pos_x, self.pos_y, 0, 64, 32, 16, 16, 0)
+        elif self.pos_y == 131:
+            pyxel.blt(self.pos_x, self.pos_y, 0, 80, 0, 16, 16, 0)
