@@ -2,12 +2,14 @@ import pyxel
 from clases.sprites.objetos.paquete import Paquete
 from clases.sprites.personajes.mario import Mario
 from clases.sprites.personajes.luigi import Luigi
+from clases.sprites.objetos.camion import Camion
 
 SCREEN_W = 256
 SCREEN_H = 144
 paquete = Paquete()
 mario = Mario()
 luigi = Luigi()
+camion = Camion()
 
 
 class App:
@@ -29,6 +31,7 @@ class App:
         paquete.draw()
         mario.draw()
         luigi.draw()
+        camion.draw()
 
 
 App()
