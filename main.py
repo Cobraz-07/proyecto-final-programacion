@@ -1,8 +1,8 @@
 import pyxel
-from clases.sprites.objetos.paquete import Paquete
-from clases.sprites.personajes.mario import Mario
-from clases.sprites.personajes.luigi import Luigi
-from clases.sprites.objetos.camion import Camion
+from clases.objetos.paquete import Paquete
+from clases.personajes.mario import Mario
+from clases.personajes.luigi import Luigi
+from clases.objetos.camion import Camion
 
 SCREEN_W = 256
 SCREEN_H = 144
