@@ -28,6 +28,11 @@ class App:
                 pyxel.quit()
             return
 
+        if camion.fallos >= 3:
+            if pyxel.btnp(pyxel.KEY_Q):
+                pyxel.quit()
+            return
+
         camion.update()
 
         if camion.paquetes == 8 and not camion.repartiendo:
@@ -51,16 +56,29 @@ class App:
             if not paquete.activo:
                 if not paquete.fallado:
                     camion.paquetes += 1
+                else:
+                    camion.fallos += 1
+
                 self.lista_paquetes.remove(paquete)
 
     def draw(self):
         if camion.entregas >= 3:
             pyxel.cls(0)
             pyxel.blt(0, 0, 2, 0, 0, SCREEN_W, SCREEN_H)
+            pyxel.text(105, 100, "GANASTE!", 7)
+            pyxel.text(90, 110, "Q para Salir", 7)
+            return
+
+        if camion.fallos >= 3:
+            pyxel.cls(0)
+            pyxel.text(100, 60, "GAME OVER", 8)
+            pyxel.text(90, 80, "Q para Salir", 7)
             return
 
         pyxel.cls(0)
         pyxel.blt(0, 0, 1, 0, 0, SCREEN_W, SCREEN_H)
+
+        pyxel.text(2, 2, f"Fallos: {camion.fallos}/3", 8)
 
         for paquete in self.lista_paquetes:
             paquete.draw()

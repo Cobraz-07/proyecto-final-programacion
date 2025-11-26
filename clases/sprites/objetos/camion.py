@@ -8,6 +8,7 @@ class Camion:
         self.pos_y = 54
         self.paquetes = 0
         self.entregas = 0
+        self.fallos = 0
 
         self.repartiendo = False
         self.timer_salida = 0
