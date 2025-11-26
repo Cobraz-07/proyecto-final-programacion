@@ -25,6 +25,13 @@ class Mario:
             elif self.posicion == 3:
                 pyxel.blt(self.posicion_x, self.posicion_3_y, 0, 0, 32, 16, 16, 0)
 
+    def drawVictoria(self, x, y):
+        if (pyxel.frame_count // 10) % 2 == 0:
+            ancho = 16
+        else:
+            ancho = -16
+        pyxel.blt(x, y, 0, 32, 0, ancho, 16, 0)
+
     def interactuar(self):
         self.timer_animacion = 10
 

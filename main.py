@@ -82,6 +82,10 @@ class App:
             pyxel.text(x1, SCREEN_H // 2 - 10, texto1, 3)
             pyxel.text(x2, SCREEN_H // 2 + 10, texto2, 7)
             pyxel.text(x3, SCREEN_H // 2 - 50, "Puntos: " + str(camion.puntos), 3)
+
+            mario.drawVictoria(SCREEN_W // 2 - 66, SCREEN_H // 2 + 10)
+            luigi.drawVictoria(SCREEN_W // 2 + 50, SCREEN_H // 2 + 10)
+
             return
 
         if camion.fallos == 3:
