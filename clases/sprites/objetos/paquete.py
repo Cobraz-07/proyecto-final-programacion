@@ -6,7 +6,6 @@ class Paquete:
         self.pos_x = 249
         self.pos_y = 102
 
-        # Alturas de las cintas
         self.altura1 = 102
         self.altura2 = 85
         self.altura3 = 68
@@ -16,12 +15,10 @@ class Paquete:
         self.speed = 1
         self.id = id
 
-        # BANDERAS DE ESTADO
-        self.activo = True  # Existe
-        self.fallado = False  # Suelo
-        self.cayendo = False  # Cayendo
+        self.activo = True
+        self.fallado = False
+        self.cayendo = False
 
-        # Para no cambiar el estilo cuando caiga
         self.u = 48
         self.v = 0
 
