@@ -21,8 +21,8 @@ class Camion:
                 self.timer_salida -= 1
 
                 # Animación: Mover el camión a la izquierda durante el primer segundo
-                if self.pos_x > -30:
-                    self.pos_x -= 1
+                if self.pos_x > -60:
+                    self.pos_x -= 2
             else:
                 # Se acabó el tiempo de espera
                 self.finalizar_reparto()
