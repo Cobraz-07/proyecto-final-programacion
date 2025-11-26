@@ -25,7 +25,7 @@ class Luigi:
                 pyxel.blt(self.posicion_x, self.posicion_3_y, 0, 16, 0, 16, 16, 0)
 
     def interactuar(self):
-        self.timer_animacion = 30
+        self.timer_animacion = 10
 
     def move(self):
         if self.timer_animacion > 0:
