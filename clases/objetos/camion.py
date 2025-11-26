@@ -32,6 +32,10 @@ class Camion:
     def finalizar_reparto(self):
         self.entregas += 1
         self.puntos += 10
+
+        if self.fallos > 0:
+            self.fallos -= 1
+
         self.paquetes = 0
         self.repartiendo = False
         self.pos_x = self.x_inicial
