@@ -2,18 +2,41 @@ import pyxel
 
 
 class Paquete:
-
-    def __init__(self):
+    def __init__(self, id):
         self.pos_x = 249
         self.pos_y = 102
+
+        # Alturas de las cintas
         self.altura1 = 102
         self.altura2 = 85
         self.altura3 = 68
         self.altura4 = 51
         self.altura5 = 34
+
         self.speed = 1
+        self.id = id
+
+        # BANDERAS DE ESTADO
+        self.activo = True  # Existe
+        self.fallado = False  # Suelo
+        self.cayendo = False  # Cayendo
+
+        # Para no cambiar el estilo cuando caiga
+        self.u = 48
+        self.v = 0
 
     def move(self):
+
+        self.actualizarSprite()
+
+        if self.cayendo:
+            self.pos_y += self.speed * 2
+
+            if self.pos_y >= 131:
+                self.activo = False
+                self.fallado = True
+            return
+
         if self.pos_y == self.altura1:
             self.pos_x -= self.speed
         elif self.pos_y == self.altura2:
@@ -25,63 +48,80 @@ class Paquete:
         elif self.pos_y == self.altura5:
             self.pos_x -= self.speed
 
-    def cambiarAltura(self, mario, luigi):
-        if self.pos_y == self.altura1 and self.pos_x == 205 and mario.posicion == 1:
-            mario.interactuar()
-            self.pos_x = 148
-        elif self.pos_y == self.altura1 and self.pos_x == 205 and mario.posicion != 1:
-            self.pos_x = 170
-            while self.pos_y < 131:
-                self.pos_y += self.speed
-        elif self.pos_y == self.altura1 and self.pos_x == 82 and luigi.posicion == 1:
-            self.pos_y = self.altura2
-        elif self.pos_y == self.altura1 and self.pos_x == 82 and luigi.posicion != 1:
-            self.pos_x = 70
-            while self.pos_y < 131:
-                self.pos_y += self.speed
-        elif self.pos_y == self.altura2 and self.pos_x == 171 and mario.posicion == 2:
-            self.pos_y = self.altura3
-        elif self.pos_y == self.altura2 and self.pos_x == 171 and mario.posicion != 2:
-            self.pos_x = 170
-            while self.pos_y < 131:
-                self.pos_y += self.speed
-        elif self.pos_y == self.altura3 and self.pos_x == 82 and luigi.posicion == 2:
-            self.pos_y = self.altura4
-        elif self.pos_y == self.altura3 and self.pos_x == 82 and luigi.posicion != 2:
-            self.pos_x = 70
-            while self.pos_y < 131:
-                self.pos_y += self.speed
-        elif self.pos_y == self.altura4 and self.pos_x == 171 and mario.posicion == 3:
-            self.pos_y = self.altura5
-        elif self.pos_y == self.altura4 and self.pos_x == 171 and mario.posicion != 3:
-            self.pos_x = 170
-            while self.pos_y < 131:
-                self.pos_y += self.speed
-        elif self.pos_y == self.altura5 and self.pos_x == 82 and luigi.posicion == 3:
-            luigi.interactuar()
-            self.pos_y = 69
-            self.pos_x = 10
+    def actualizarSprite(self):
+        if self.cayendo:
+            return
 
-    def draw(self):
         if self.pos_y == self.altura1 and self.pos_x >= 118:
-            pyxel.blt(self.pos_x, self.pos_y, 0, 48, 0, 16, 16, 0)
+            self.u, self.v = 48, 0
         elif (
             self.pos_y == self.altura1 or self.pos_y == self.altura2
         ) and self.pos_x < 118:
-            pyxel.blt(self.pos_x, self.pos_y, 0, 48, 16, 16, 16, 0)
+            self.u, self.v = 48, 16
         elif (
             self.pos_y == self.altura2 or self.pos_y == self.altura3
         ) and self.pos_x >= 118:
-            pyxel.blt(self.pos_x, self.pos_y, 0, 48, 32, 16, 16, 0)
+            self.u, self.v = 48, 32
         elif (
             self.pos_y == self.altura3 or self.pos_y == self.altura4
         ) and self.pos_x < 118:
-            pyxel.blt(self.pos_x, self.pos_y, 0, 64, 0, 16, 16, 0)
+            self.u, self.v = 64, 0
         elif (
             self.pos_y == self.altura4 or self.pos_y == self.altura5
         ) and self.pos_x >= 118:
-            pyxel.blt(self.pos_x, self.pos_y, 0, 64, 16, 16, 16, 0)
-        elif self.pos_y == 131:
-            pyxel.blt(self.pos_x, self.pos_y, 0, 80, 0, 16, 16, 0)
+            self.u, self.v = 64, 16
         else:
-            pyxel.blt(self.pos_x, self.pos_y, 0, 64, 32, 16, 16, 0)
+            self.u, self.v = 64, 32
+
+    def cambiarAltura(self, mario, luigi):
+        if self.cayendo:
+            return
+
+        if self.pos_y == self.altura1 and self.pos_x == 205:
+            if mario.posicion == 1:
+                mario.interactuar()
+                self.pos_x = 148
+            else:
+                self.pos_x = 170
+                self.cayendo = True
+
+        elif self.pos_y == self.altura1 and self.pos_x == 82:
+            if luigi.posicion == 1:
+                self.pos_y = self.altura2
+            else:
+                self.pos_x = 69
+                self.cayendo = True
+
+        elif self.pos_y == self.altura2 and self.pos_x == 171:
+            if mario.posicion == 2:
+                self.pos_y = self.altura3
+            else:
+                self.pos_x = 170
+                self.cayendo = True
+
+        elif self.pos_y == self.altura3 and self.pos_x == 82:
+            if luigi.posicion == 2:
+                self.pos_y = self.altura4
+            else:
+                self.pos_x = 69
+                self.cayendo = True
+
+        elif self.pos_y == self.altura4 and self.pos_x == 171:
+            if mario.posicion == 3:
+                self.pos_y = self.altura5
+            else:
+                self.pos_x = 170
+                self.cayendo = True
+
+        elif self.pos_y == self.altura5 and self.pos_x == 82:
+            if luigi.posicion == 3:
+                luigi.interactuar()
+                self.activo = False
+                self.fallado = False
+            else:
+                self.pos_x = 69
+                self.cayendo = True
+
+    def draw(self):
+
+        pyxel.blt(self.pos_x, self.pos_y, 0, self.u, self.v, 16, 16, 0)
