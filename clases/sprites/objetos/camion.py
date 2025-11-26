@@ -9,6 +9,7 @@ class Camion:
         self.paquetes = 0
         self.entregas = 0
         self.fallos = 0
+        self.puntos = 0
 
         self.repartiendo = False
         self.timer_salida = 0
@@ -30,6 +31,7 @@ class Camion:
 
     def finalizar_reparto(self):
         self.entregas += 1
+        self.puntos += 10
         self.paquetes = 0
         self.repartiendo = False
         self.pos_x = self.x_inicial

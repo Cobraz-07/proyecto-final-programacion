@@ -70,7 +70,7 @@ class Paquete:
         else:
             self.u, self.v = 64, 32
 
-    def cambiarAltura(self, mario, luigi):
+    def cambiarAltura(self, mario, luigi, camion):
         if self.cayendo:
             return
 
@@ -85,6 +85,7 @@ class Paquete:
         elif self.pos_y == self.altura1 and self.pos_x == 82:
             if luigi.posicion == 1:
                 self.pos_y = self.altura2
+                camion.puntos += 1
             else:
                 self.pos_x = 69
                 self.cayendo = True
@@ -92,6 +93,7 @@ class Paquete:
         elif self.pos_y == self.altura2 and self.pos_x == 171:
             if mario.posicion == 2:
                 self.pos_y = self.altura3
+                camion.puntos += 1
             else:
                 self.pos_x = 170
                 self.cayendo = True
@@ -99,6 +101,7 @@ class Paquete:
         elif self.pos_y == self.altura3 and self.pos_x == 82:
             if luigi.posicion == 2:
                 self.pos_y = self.altura4
+                camion.puntos += 1
             else:
                 self.pos_x = 69
                 self.cayendo = True
@@ -106,6 +109,7 @@ class Paquete:
         elif self.pos_y == self.altura4 and self.pos_x == 171:
             if mario.posicion == 3:
                 self.pos_y = self.altura5
+                camion.puntos += 1
             else:
                 self.pos_x = 170
                 self.cayendo = True
