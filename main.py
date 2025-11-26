@@ -30,33 +30,32 @@ class App:
     def update(self):
         # Condición de victoria
         if camion.entregas >= 3:
-            if pyxel.btnp(pyxel.KEY_Q):  # Opción para salir
+            if pyxel.btnp(pyxel.KEY_Q):
                 pyxel.quit()
             return
 
-        # 1. Actualizamos el camión siempre (para que cuente su timer)
         camion.update()
 
-        # 2. Si el camión llegó a 8 paquetes y AÚN NO ha empezado el reparto:
+        # Si el camión está lleno y no ha empezado a irse
         if camion.paquetes == 8 and not camion.repartiendo:
             camion.iniciar_reparto()
-            self.lista_paquetes.clear()  # ELIMINA TODOS LOS PAQUETES
+            self.lista_paquetes.clear()  # Limpia paquetes al salir
             return
 
-        # 3. Si el camión ESTÁ repartiendo, PAUSAMOS el resto del juego
+        # Si el camión está repartiendo, pausa el juego
         if camion.repartiendo:
             return
 
-        # --- JUEGO NORMAL (Solo ocurre si no está repartiendo) ---
+        # --- JUEGO ACTIVO ---
 
         mario.move()
         luigi.move()
 
-        # Generar paquetes
-        if pyxel.frame_count % 120 == 0:
+        # Generación de paquetes:
+        # Solo generamos si toca por tiempo (120 frames) Y si hay menos de 3 paquetes
+        if pyxel.frame_count % 120 == 0 and len(self.lista_paquetes) < 3:
             self.lista_paquetes.append(Paquete(len(self.lista_paquetes)))
 
-        # Mover paquetes
         for paquete in self.lista_paquetes[:]:
             paquete.move()
             paquete.cambiarAltura(mario, luigi)
