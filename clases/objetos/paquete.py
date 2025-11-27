@@ -42,7 +42,7 @@ class Paquete:
             self.pos_x = x_destino
             self.cayendo = True
 
-        if self.pos_y == self.alturas[0] and self.pos_x == 205:
+        if self.pos_y == self.alturas[0] and self.pos_x == 197:
             if mario.posicion == 1:
                 mario.interactuar()
                 self.pos_x = 148
@@ -50,7 +50,7 @@ class Paquete:
                 caer(170)
             return
 
-        if self.pos_x == 82:
+        if self.pos_x == 72:
             if self.pos_y in self.alturas:
                 idx = self.alturas.index(self.pos_y)
 
@@ -64,12 +64,13 @@ class Paquete:
                             self.fallado = False
                         else:
                             self.pos_y = self.alturas[idx + 1]
+                            self.pos_x = 82
                             camion.puntos += 1
                     else:
                         caer(69)
             return
 
-        if self.pos_x == 171:
+        if self.pos_x == 167:
             if self.pos_y in self.alturas:
                 idx = self.alturas.index(self.pos_y)
 
@@ -78,6 +79,7 @@ class Paquete:
 
                     if mario.posicion == req_pos:
                         self.pos_y = self.alturas[idx + 1]
+                        self.pos_x = 154
                         camion.puntos += 1
                     else:
                         caer(170)
