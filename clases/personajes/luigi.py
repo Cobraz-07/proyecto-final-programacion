@@ -9,7 +9,6 @@ class Luigi:
         self.posicion_2_y = 62
         self.posicion_3_y = 28
         self.posicion_x = 55
-        self.paquetePorDerecha = False
         self.timer_animacion = 0
 
     def draw(self):

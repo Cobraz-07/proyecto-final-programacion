@@ -9,7 +9,6 @@ class Mario:
         self.posicion_2_y = 79
         self.posicion_3_y = 45
         self.posicion_x = 182
-        self.paquetePorDerecha = False
         self.timer_animacion = 0
 
     def draw(self):

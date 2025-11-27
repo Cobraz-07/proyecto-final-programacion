@@ -53,7 +53,7 @@ class App:
         luigi.move()
 
         if pyxel.frame_count % 210 == 0 and len(self.lista_paquetes) < 3:
-            self.lista_paquetes.append(Paquete(len(self.lista_paquetes)))
+            self.lista_paquetes.append(Paquete())
 
         for paquete in self.lista_paquetes[:]:
             paquete.move()

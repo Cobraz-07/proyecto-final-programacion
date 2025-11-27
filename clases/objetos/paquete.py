@@ -2,7 +2,7 @@ import pyxel
 
 
 class Paquete:
-    def __init__(self, id):
+    def __init__(self):
         self.pos_x = 249
         self.pos_y = 102
 
@@ -13,7 +13,6 @@ class Paquete:
         self.altura5 = 34
 
         self.speed = 1
-        self.id = id
 
         self.activo = True
         self.fallado = False
