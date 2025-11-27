@@ -57,8 +57,6 @@ class App:
             jefe.aparecerDoble()
 
         if camion.repartiendo:
-            if camion.paquetes == 8:
-                self.lista_paquetes.clear()
             return
 
         if camion.paquetes == 8 and not camion.repartiendo:
