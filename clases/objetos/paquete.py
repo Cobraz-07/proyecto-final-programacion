@@ -6,11 +6,7 @@ class Paquete:
         self.pos_x = 249
         self.pos_y = 102
 
-        self.altura1 = 102
-        self.altura2 = 85
-        self.altura3 = 68
-        self.altura4 = 51
-        self.altura5 = 34
+        self.alturas = [102, 85, 68, 51, 34]
 
         self.speed = 1
 
@@ -22,106 +18,90 @@ class Paquete:
         self.v = 0
 
     def move(self):
-
         self.actualizarSprite()
 
         if self.cayendo:
             self.pos_y += self.speed * 2
-
             if self.pos_y >= 131:
                 self.activo = False
                 self.fallado = True
             return
 
-        if self.pos_y == self.altura1:
-            self.pos_x -= self.speed
-        elif self.pos_y == self.altura2:
-            self.pos_x += self.speed
-        elif self.pos_y == self.altura3:
-            self.pos_x -= self.speed
-        elif self.pos_y == self.altura4:
-            self.pos_x += self.speed
-        elif self.pos_y == self.altura5:
-            self.pos_x -= self.speed
-
-    def actualizarSprite(self):
-        if self.cayendo:
-            return
-
-        if self.pos_y == self.altura1 and self.pos_x >= 118:
-            self.u, self.v = 48, 0
-        elif (
-            self.pos_y == self.altura1 or self.pos_y == self.altura2
-        ) and self.pos_x < 118:
-            self.u, self.v = 48, 16
-        elif (
-            self.pos_y == self.altura2 or self.pos_y == self.altura3
-        ) and self.pos_x >= 118:
-            self.u, self.v = 48, 32
-        elif (
-            self.pos_y == self.altura3 or self.pos_y == self.altura4
-        ) and self.pos_x < 118:
-            self.u, self.v = 64, 0
-        elif (
-            self.pos_y == self.altura4 or self.pos_y == self.altura5
-        ) and self.pos_x >= 118:
-            self.u, self.v = 64, 16
-        else:
-            self.u, self.v = 64, 32
+        if self.pos_y in self.alturas:
+            idx = self.alturas.index(self.pos_y)
+            if idx % 2 == 0:
+                self.pos_x -= self.speed
+            else:
+                self.pos_x += self.speed
 
     def cambiarAltura(self, mario, luigi, camion):
         if self.cayendo:
             return
 
-        if self.pos_y == self.altura1 and self.pos_x == 205:
+        def caer(x_destino):
+            self.pos_x = x_destino
+            self.cayendo = True
+
+        if self.pos_y == self.alturas[0] and self.pos_x == 205:
             if mario.posicion == 1:
                 mario.interactuar()
                 self.pos_x = 148
             else:
-                self.pos_x = 170
-                self.cayendo = True
+                caer(170)
+            return
 
-        elif self.pos_y == self.altura1 and self.pos_x == 82:
-            if luigi.posicion == 1:
-                self.pos_y = self.altura2
-                camion.puntos += 1
-            else:
-                self.pos_x = 69
-                self.cayendo = True
+        if self.pos_x == 82:
+            if self.pos_y in self.alturas:
+                idx = self.alturas.index(self.pos_y)
 
-        elif self.pos_y == self.altura2 and self.pos_x == 171:
-            if mario.posicion == 2:
-                self.pos_y = self.altura3
-                camion.puntos += 1
-            else:
-                self.pos_x = 170
-                self.cayendo = True
+                if idx % 2 == 0:
+                    req_pos = (idx // 2) + 1
 
-        elif self.pos_y == self.altura3 and self.pos_x == 82:
-            if luigi.posicion == 2:
-                self.pos_y = self.altura4
-                camion.puntos += 1
-            else:
-                self.pos_x = 69
-                self.cayendo = True
+                    if luigi.posicion == req_pos:
+                        if req_pos == 3:
+                            luigi.interactuar()
+                            self.activo = False
+                            self.fallado = False
+                        else:
+                            self.pos_y = self.alturas[idx + 1]
+                            camion.puntos += 1
+                    else:
+                        caer(69)
+            return
 
-        elif self.pos_y == self.altura4 and self.pos_x == 171:
-            if mario.posicion == 3:
-                self.pos_y = self.altura5
-                camion.puntos += 1
-            else:
-                self.pos_x = 170
-                self.cayendo = True
+        if self.pos_x == 171:
+            if self.pos_y in self.alturas:
+                idx = self.alturas.index(self.pos_y)
 
-        elif self.pos_y == self.altura5 and self.pos_x == 82:
-            if luigi.posicion == 3:
-                luigi.interactuar()
-                self.activo = False
-                self.fallado = False
-            else:
-                self.pos_x = 69
-                self.cayendo = True
+                if idx % 2 != 0:
+                    req_pos = (idx // 2) + 2
+
+                    if mario.posicion == req_pos:
+                        self.pos_y = self.alturas[idx + 1]
+                        camion.puntos += 1
+                    else:
+                        caer(170)
+
+    def actualizarSprite(self):
+        if self.cayendo:
+            return
+
+        y = self.pos_y
+        x = self.pos_x
+        h = self.alturas
+
+        if y == h[0] and x >= 118:
+            self.u, self.v = 48, 0
+        elif (y == h[0] or y == h[1]) and x < 118:
+            self.u, self.v = 48, 16
+        elif (y == h[1] or y == h[2]) and x >= 118:
+            self.u, self.v = 48, 32
+        elif (y == h[2] or y == h[3]) and x < 118:
+            self.u, self.v = 64, 0
+        elif (y == h[3] or y == h[4]) and x >= 118:
+            self.u, self.v = 64, 16
+        else:
+            self.u, self.v = 64, 32
 
     def draw(self):
-
         pyxel.blt(self.pos_x, self.pos_y, 0, self.u, self.v, 16, 16, 0)
