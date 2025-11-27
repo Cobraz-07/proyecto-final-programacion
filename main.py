@@ -98,7 +98,7 @@ class App:
         pyxel.blt(0, 0, 1, 0, 0, SCREEN_W, SCREEN_H)
 
         pyxel.text(2, 2, f"Puntos: {camion.puntos}", 3)
-        pyxel.text(45, 2, f"Fallos: {camion.fallos}/3", 8)
+        pyxel.text(50, 2, f"Fallos: {camion.fallos}/3", 8)
 
         for paquete in self.lista_paquetes:
             paquete.draw()
