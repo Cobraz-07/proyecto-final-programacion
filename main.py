@@ -23,6 +23,23 @@ class App:
         self.lista_paquetes = []
         pyxel.run(self.update, self.draw)
 
+    def dibujar_texto_centrado(self, texto, y, color):
+        x = SCREEN_W // 2 - len(texto) * 2
+        pyxel.text(x, y, texto, color)
+
+    def mostrar_pantalla_final(self, titulo, color_titulo, es_victoria):
+        pyxel.cls(0)
+
+        self.dibujar_texto_centrado(titulo, SCREEN_H // 2 - 10, color_titulo)
+        self.dibujar_texto_centrado("Q para Salir", SCREEN_H // 2 + 10, 7)
+
+        if es_victoria:
+            self.dibujar_texto_centrado(
+                f"Puntos: {camion.puntos}", SCREEN_H // 2 - 50, 3
+            )
+            mario.drawVictoria(SCREEN_W // 2 - 66, SCREEN_H // 2 + 10)
+            luigi.drawVictoria(SCREEN_W // 2 + 50, SCREEN_H // 2 + 10)
+
     def update(self):
         if camion.entregas == 3 or camion.fallos == 3:
             if pyxel.btnp(pyxel.KEY_Q):
@@ -70,35 +87,11 @@ class App:
 
     def draw(self):
         if camion.entregas == 3:
-            pyxel.cls(0)
-
-            texto1 = "GANASTE!"
-            texto2 = "Q para Salir"
-
-            x1 = SCREEN_W // 2 - len(texto1) * 2
-            x2 = SCREEN_W // 2 - len(texto2) * 2
-            x3 = SCREEN_W // 2 - len("Puntos: " + str(camion.puntos)) * 2
-
-            pyxel.text(x1, SCREEN_H // 2 - 10, texto1, 3)
-            pyxel.text(x2, SCREEN_H // 2 + 10, texto2, 7)
-            pyxel.text(x3, SCREEN_H // 2 - 50, "Puntos: " + str(camion.puntos), 3)
-
-            mario.drawVictoria(SCREEN_W // 2 - 66, SCREEN_H // 2 + 10)
-            luigi.drawVictoria(SCREEN_W // 2 + 50, SCREEN_H // 2 + 10)
-
+            self.mostrar_pantalla_final("GANASTE!", 3, es_victoria=True)
             return
 
         if camion.fallos == 3:
-            pyxel.cls(0)
-
-            texto1 = "GAME OVER"
-            texto2 = "Q para Salir"
-
-            x1 = SCREEN_W // 2 - len(texto1) * 2
-            x2 = SCREEN_W // 2 - len(texto2) * 2
-
-            pyxel.text(x1, SCREEN_H // 2 - 10, texto1, 8)
-            pyxel.text(x2, SCREEN_H // 2 + 10, texto2, 7)
+            self.mostrar_pantalla_final("GAME OVER", 8, es_victoria=False)
             return
 
         pyxel.cls(0)
