@@ -1,44 +1,20 @@
 import pyxel
+from .personaje import Personaje
 
 
-class Luigi:
-
+class Luigi(Personaje):
     def __init__(self):
-        self.posicion = 1
-        self.posicion_1_y = 96
-        self.posicion_2_y = 62
-        self.posicion_3_y = 28
-        self.posicion_x = 55
-        self.timer_animacion = 0
+        super().__init__(
+            x=55,
+            y_positions=(96, 62, 28),
+            teclas=(pyxel.KEY_W, pyxel.KEY_S),
+            sprite_victoria_u=16,
+        )
 
     def draw(self):
         if self.timer_animacion > 0:
-            pyxel.blt(self.posicion_x, self.posicion_3_y, 0, 32, 32, 16, 16, 0)
-
-        else:
-            if self.posicion == 1:
-                pyxel.blt(self.posicion_x, self.posicion_1_y, 0, 16, 0, 16, 16, 0)
-            elif self.posicion == 2:
-                pyxel.blt(self.posicion_x, self.posicion_2_y, 0, 16, 0, 16, 16, 0)
-            elif self.posicion == 3:
-                pyxel.blt(self.posicion_x, self.posicion_3_y, 0, 16, 0, 16, 16, 0)
-
-    def drawVictoria(self, x, y):
-        if (pyxel.frame_count // 10) % 2 == 0:
-            ancho = 16
-        else:
-            ancho = -16
-        pyxel.blt(x, y, 0, 16, 0, ancho, 16, 0)
-
-    def interactuar(self):
-        self.timer_animacion = 10
-
-    def move(self):
-        if self.timer_animacion > 0:
-            self.timer_animacion -= 1
+            pyxel.blt(self.posicion_x, self.y_positions[2], 0, 32, 32, 16, 16, 0)
             return
 
-        if pyxel.btnp(pyxel.KEY_W) and self.posicion < 3:
-            self.posicion += 1
-        if pyxel.btnp(pyxel.KEY_S) and self.posicion > 1:
-            self.posicion -= 1
+        y_actual = self.y_positions[self.posicion - 1]
+        pyxel.blt(self.posicion_x, y_actual, 0, 16, 0, 16, 16, 0)

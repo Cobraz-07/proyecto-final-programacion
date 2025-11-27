@@ -1,46 +1,26 @@
 import pyxel
+from .personaje import Personaje
 
 
-class Mario:
-
+class Mario(Personaje):
     def __init__(self):
-        self.posicion = 1
-        self.posicion_1_y = 109
-        self.posicion_2_y = 79
-        self.posicion_3_y = 45
-        self.posicion_x = 182
-        self.timer_animacion = 0
+        super().__init__(
+            x=182,
+            y_positions=(109, 79, 45),
+            teclas=(pyxel.KEY_UP, pyxel.KEY_DOWN),
+            sprite_victoria_u=32,
+        )
 
     def draw(self):
-
         if self.timer_animacion > 0:
-            pyxel.blt(self.posicion_x, self.posicion_1_y, 0, 0, 32, 16, 16, 0)
-
-        else:
-            if self.posicion == 1:
-                pyxel.blt(self.posicion_x, self.posicion_1_y, 0, 32, 0, 16, 16, 0)
-            elif self.posicion == 2:
-                pyxel.blt(self.posicion_x, self.posicion_2_y, 0, 0, 32, 16, 16, 0)
-            elif self.posicion == 3:
-                pyxel.blt(self.posicion_x, self.posicion_3_y, 0, 0, 32, 16, 16, 0)
-
-    def drawVictoria(self, x, y):
-        if (pyxel.frame_count // 10) % 2 == 0:
-            ancho = 16
-        else:
-            ancho = -16
-        pyxel.blt(x, y, 0, 32, 0, ancho, 16, 0)
-
-    def interactuar(self):
-        self.timer_animacion = 10
-
-    def move(self):
-        if self.timer_animacion > 0:
-            self.timer_animacion -= 1
+            pyxel.blt(self.posicion_x, self.y_positions[0], 0, 0, 32, 16, 16, 0)
             return
 
-        if pyxel.btnp(pyxel.KEY_UP) and self.posicion < 3:
-            self.posicion += 1
+        y_actual = self.y_positions[self.posicion - 1]
 
-        if pyxel.btnp(pyxel.KEY_DOWN) and self.posicion > 1:
-            self.posicion -= 1
+        if self.posicion == 1:
+            u, v = 32, 0
+        else:
+            u, v = 0, 32
+
+        pyxel.blt(self.posicion_x, y_actual, 0, u, v, 16, 16, 0)
