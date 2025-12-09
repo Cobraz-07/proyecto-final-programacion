@@ -8,14 +8,41 @@ class Camion:
         self.pos_y = 54
 
         # Estadísticas del juego
-        self.paquetes = 0  # Paquetes cargados actualmente
-        self.entregas = 0  # Viajes completados
-        self.fallos = 0
-        self.puntos = 0
+        self._paquetes = 0  # Paquetes cargados actualmente
+        self._entregas = 0  # Viajes completados
+        self._fallos = 0
+        self._puntos = 0
 
         self.repartiendo = False
         self.timer_salida = 0
         self.tiempo_espera = 30 * 5  # 5 segundos
+
+    # --- PROPIEDADES (Getters) para leer los valores ---
+    @property
+    def puntos(self):
+        return self._puntos
+
+    @property
+    def entregas(self):
+        return self._entregas
+
+    @property
+    def fallos(self):
+        return self._fallos
+
+    @property
+    def paquetes(self):
+        return self._paquetes
+
+    # --- MÉTODOS para modificar los valores de forma segura ---
+    def cargar_paquete(self):
+        self._paquetes += 1
+
+    def registrar_fallo(self):
+        self._fallos += 1
+
+    def sumar_puntos(self, cantidad):
+        self._puntos += cantidad
 
     def update(self):
         # Lógica de animación cuando el camión se va
@@ -36,14 +63,14 @@ class Camion:
 
     def finalizar_reparto(self):
         # Reinicia el camión y suma puntos
-        self.entregas += 1
-        self.puntos += 10
+        self._entregas += 1
+        self.sumar_puntos(10)
 
         # Bonificación: limpia un fallo si existe
-        if self.fallos > 0:
-            self.fallos -= 1
+        if self._fallos > 0:
+            self._fallos -= 1
 
-        self.paquetes = 0
+        self._paquetes = 0
         self.repartiendo = False
         self.pos_x = self.x_inicial
 

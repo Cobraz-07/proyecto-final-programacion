@@ -3,7 +3,7 @@ import pyxel
 
 class Personaje:
     def __init__(self, x, y_positions, teclas, sprite_victoria_u):
-        self.posicion = 1  # Posición (en relación a las alturas)
+        self._posicion = 1  # Posición (en relación a las alturas)
         self.timer_animacion = 0
 
         self.posicion_x = x
@@ -11,6 +11,11 @@ class Personaje:
         self.key_up = teclas[0]
         self.key_down = teclas[1]
         self.sprite_victoria_u = sprite_victoria_u
+
+    # Propiedad para que desde fuera puedan leer 'mario.posicion'
+    @property
+    def posicion(self):
+        return self._posicion
 
     def move(self):
         # Si está en animación, bloquear movimiento
@@ -20,10 +25,10 @@ class Personaje:
 
         # Movimiento arriba/abajo entre los pisos definidos
         if pyxel.btnp(self.key_up) and self.posicion < 3:
-            self.posicion += 1
+            self._posicion += 1
 
         if pyxel.btnp(self.key_down) and self.posicion > 1:
-            self.posicion -= 1
+            self._posicion -= 1
 
     def interactuar(self):
         # Inicia pequeña animación al pasar paquete de derecha a izquierda

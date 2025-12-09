@@ -2,15 +2,16 @@ import pyxel
 
 
 class Paquete:
-    def __init__(self):
+
+    # Alturas de las cintas transportadoras
+    ALTURAS = [102, 85, 68, 51, 34]
+
+    def __init__(self, velocidad):
         # Posiciones iniciales (abajo a la derecha)
         self.pos_x = 249
         self.pos_y = 102
 
-        # Alturas de las cintas transportadoras
-        self.alturas = [102, 85, 68, 51, 34]
-
-        self.speed = 1  # Velocidad de movimiento
+        self.speed = velocidad  # Velocidad de movimiento
         self.activo = True  # Indica si el paquete está en juego
         self.fallado = False  # Indica si el paquete ha caído
         self.cayendo = False  # Estado cuando cae al vacío
@@ -30,7 +31,9 @@ class Paquete:
             return
 
         # Interacción inicial con Mario (abajo a la derecha)
-        if self.pos_y == self.alturas[0] and self.pos_x == 197:
+        # Usamos un rango: si cruza el punto 197 pero no ha llegado aún al destino 148.
+        # "180" es un margen de seguridad para que no se reactive tras teletransportarse.
+        if self.pos_y == self.ALTURAS[0] and 180 < self.pos_x <= 197:
             if mario.posicion == 1:
                 mario.interactuar()
                 self.pos_x = 148  # Salto a siguiente cinta
@@ -39,41 +42,44 @@ class Paquete:
             return
 
         # Interacción en la zona izquierda (Luigi)
-        if self.pos_x == 72:
-            if self.pos_y in self.alturas:
-                idx = self.alturas.index(self.pos_y)
+        # Detectamos si ha cruzado o llegado a la posición 72 (movimiento hacia la izquierda)
+        if self.pos_x <= 72:
+            if self.pos_y in self.ALTURAS:
+                idx = self.ALTURAS.index(self.pos_y)
 
+                # Solo verificamos si es una cinta PAR (que mueve hacia la izquierda)
                 if idx % 2 == 0:
-                    req_pos = (idx // 2) + 1  # Calcular posición requerida de Luigi
+                    req_pos = (idx // 2) + 1
 
                     if luigi.posicion == req_pos:
-                        # Si es el último nivel, entrega exitosa
                         if req_pos == 3:
                             luigi.interactuar()
                             self.activo = False
                             self.fallado = False
                         else:
                             # Pasar al siguiente nivel
-                            self.pos_y = self.alturas[idx + 1]
+                            self.pos_y = self.ALTURAS[idx + 1]
                             self.pos_x = 82
-                            camion.puntos += 1
+                            camion.sumar_puntos(1)
                     else:
-                        self.caer(69)  # Luigi no estaba
+                        self.caer(69)
             return
 
         # Interacción en la zona derecha (Mario)
-        if self.pos_x == 167:
-            if self.pos_y in self.alturas:
-                idx = self.alturas.index(self.pos_y)
+        # Detectamos si ha cruzado o llegado a la posición 167 (movimiento hacia la derecha)
+        if self.pos_x >= 167:
+            if self.pos_y in self.ALTURAS:
+                idx = self.ALTURAS.index(self.pos_y)
 
+                # Solo verificamos si es una cinta IMPAR (que mueve hacia la derecha)
                 if idx % 2 != 0:
-                    req_pos = (idx // 2) + 2  # Calcular posición requerida de Mario
+                    req_pos = (idx // 2) + 2
 
                     if mario.posicion == req_pos:
                         # Pasar al siguiente nivel
-                        self.pos_y = self.alturas[idx + 1]
+                        self.pos_y = self.ALTURAS[idx + 1]
                         self.pos_x = 154
-                        camion.puntos += 1
+                        camion.sumar_puntos(1)
                     else:
                         self.caer(170)  # Mario no estaba
 
@@ -84,7 +90,7 @@ class Paquete:
         # Cambiar sprite según posición en la cinta
         y = self.pos_y
         x = self.pos_x
-        h = self.alturas
+        h = self.ALTURAS
 
         # Lógica para seleccionar el sprite correcto del banco de imágenes, dependiendo de la altura y posición
         if y == h[0] and x >= 118:
@@ -113,8 +119,8 @@ class Paquete:
             return
 
         # Movimiento normal en las cintas (zigzag)
-        if self.pos_y in self.alturas:
-            idx = self.alturas.index(self.pos_y)
+        if self.pos_y in self.ALTURAS:
+            idx = self.ALTURAS.index(self.pos_y)
             # Pares van hacia la derecha, impares a la izquierda
             if idx % 2 == 0:
                 self.pos_x -= self.speed

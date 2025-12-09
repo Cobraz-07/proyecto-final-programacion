@@ -9,6 +9,9 @@ from clases.personajes.jefe import Jefe
 SCREEN_W = 256
 SCREEN_H = 144
 
+# Dificultad (velocidad de los paquetes)
+VELOCIDAD_PAQUETES = 2
+
 # Instancia global de objetos
 mario = Mario()
 luigi = Luigi()
@@ -81,7 +84,7 @@ class App:
 
         # Generar paquetes nuevos periódicamente (máximo 3 en pantalla)
         if pyxel.frame_count % 210 == 0 and len(self.lista_paquetes) < 3:
-            self.lista_paquetes.append(Paquete())
+            self.lista_paquetes.append(Paquete(VELOCIDAD_PAQUETES))
 
         # Actualizar paquetes existentes
         for paquete in self.lista_paquetes[:]:
@@ -91,9 +94,9 @@ class App:
             # Gestión de paquetes inactivos (entregados o caídos)
             if not paquete.activo:
                 if not paquete.fallado:
-                    camion.paquetes += 1  # Paquete exitoso
+                    camion.cargar_paquete()  # Paquete exitoso
                 else:
-                    camion.fallos += 1  # Paquete fallido
+                    camion.registrar_fallo()  # Paquete fallido
                     jefe.aparecer(paquete.pos_x)  # Jefe regaña en la posición del fallo
 
                 self.lista_paquetes.remove(paquete)
