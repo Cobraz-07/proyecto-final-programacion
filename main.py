@@ -9,8 +9,9 @@ from clases.personajes.jefe import Jefe
 SCREEN_W = 256
 SCREEN_H = 144
 
-# Dificultad (velocidad de los paquetes)
-VELOCIDAD_PAQUETES = 2
+# Dificultad
+VELOCIDAD_PAQUETES = 1
+FRAMES_POR_PAQUETE = 210
 
 # Instancia global de objetos
 mario = Mario()
@@ -83,7 +84,7 @@ class App:
         luigi.move()
 
         # Generar paquetes nuevos periódicamente (máximo 3 en pantalla)
-        if pyxel.frame_count % 210 == 0 and len(self.lista_paquetes) < 3:
+        if pyxel.frame_count % FRAMES_POR_PAQUETE == 0 and len(self.lista_paquetes) < 3:
             self.lista_paquetes.append(Paquete(VELOCIDAD_PAQUETES))
 
         # Actualizar paquetes existentes
