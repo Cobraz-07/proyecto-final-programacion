@@ -60,6 +60,7 @@ class Camion:
         # Comienza la secuencia de salida
         self.repartiendo = True
         self.timer_salida = self.tiempo_espera
+        pyxel.play(2, 2)
 
     def finalizar_reparto(self):
         # Reinicia el camión y suma puntos
