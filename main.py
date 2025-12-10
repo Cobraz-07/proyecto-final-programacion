@@ -4,6 +4,7 @@ from clases.personajes.mario import Mario
 from clases.personajes.luigi import Luigi
 from clases.objetos.camion import Camion
 from clases.personajes.jefe import Jefe
+from clases.objetos.cinta import Cinta
 
 # Configuración de tamaño pantalla
 SCREEN_W = 256
@@ -27,6 +28,8 @@ class App:
         pyxel.load("./assets/resources.pyxres")
         # Cargar imagen de fondo en el banco de imágenes 1
         pyxel.images[1].load(0, 0, "./assets/fondo.png")
+
+        self.cintas_juego = [Cinta(102, -1), Cinta(102, -1), Cinta(85, 1), Cinta(68, -1), Cinta(51, 1), Cinta(34, -1)]
 
         self.lista_paquetes = []
         pyxel.run(self.update, self.draw)
@@ -85,7 +88,7 @@ class App:
 
         # Generar paquetes nuevos periódicamente (máximo 3 en pantalla)
         if pyxel.frame_count % FRAMES_POR_PAQUETE == 0 and len(self.lista_paquetes) < 3:
-            self.lista_paquetes.append(Paquete(VELOCIDAD_PAQUETES))
+            self.lista_paquetes.append(Paquete(self.cintas_juego, VELOCIDAD_PAQUETES))
 
         # Actualizar paquetes existentes
         for paquete in self.lista_paquetes[:]:

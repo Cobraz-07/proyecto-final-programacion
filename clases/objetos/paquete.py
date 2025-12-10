@@ -3,13 +3,17 @@ import pyxel
 
 class Paquete:
 
-    # Alturas de las cintas transportadoras
-    ALTURAS = [102, 85, 68, 51, 34]
+    def __init__(self, cintas, velocidad):
+        # Recibimos la lista de objetos Cinta desde el Main
+        self.cintas = cintas
+        self.indice_cinta = 0  # Empezamos en la primera cinta (la de abajo)
 
-    def __init__(self, velocidad):
+        # Obtenemos la cinta actual
+        cinta_actual = self.cintas[self.indice_cinta]
+
         # Posiciones iniciales (abajo a la derecha)
         self.pos_x = 249
-        self.pos_y = 102
+        self.pos_y = cinta_actual.y
 
         self.speed = velocidad  # Velocidad de movimiento
         self.activo = True  # Indica si el paquete está en juego
@@ -30,79 +34,75 @@ class Paquete:
         if self.cayendo:
             return
 
-        # Interacción inicial con Mario (abajo a la derecha)
-        # Usamos un rango: si cruza el punto 197 pero no ha llegado aún al destino 148.
-        # "180" es un margen de seguridad para que no se reactive tras teletransportarse.
-        if self.pos_y == self.ALTURAS[0] and 180 < self.pos_x <= 197:
-            if mario.posicion == 1:
-                mario.interactuar()
-                self.pos_x = 148  # Salto a siguiente cinta
-            else:
-                self.caer(170)
+        # Obtenemos la cinta actual
+        cinta_actual = self.cintas[self.indice_cinta]
+
+        # 1. INTERACCIÓN INICIAL (Cinta 0)
+        if self.indice_cinta == 0:
+            if 180 < self.pos_x <= 197:  # Rango para detectar a velocidad alta
+                if mario.posicion == 1:
+                    mario.interactuar()
+                    self.cambiar_cinta()
+                    self.pos_x = 148
+                else:
+                    self.caer(170)
             return
 
-        # Interacción en la zona izquierda (Luigi)
-        # Detectamos si ha cruzado o llegado a la posición 72 (movimiento hacia la izquierda)
-        if self.pos_x <= 72:
-            if self.pos_y in self.ALTURAS:
-                idx = self.ALTURAS.index(self.pos_y)
+        # 2. MOVIMIENTO HACIA LA IZQUIERDA
+        if cinta_actual.mueve_a_izquierda:
+            if self.pos_x <= 72:  # Detectar llegada a la izquierda
+                # Calculamos qué posición de Luigi corresponde a esta cinta
+                req_pos = (self.indice_cinta // 2) + 1
 
-                # Solo verificamos si es una cinta PAR (que mueve hacia la izquierda)
-                if idx % 2 == 0:
-                    req_pos = (idx // 2) + 1
-
-                    if luigi.posicion == req_pos:
-                        if req_pos == 3:
-                            luigi.interactuar()
-                            self.activo = False
-                            self.fallado = False
-                        else:
-                            # Pasar al siguiente nivel
-                            self.pos_y = self.ALTURAS[idx + 1]
-                            self.pos_x = 82
-                            camion.sumar_puntos(1)
+                if luigi.posicion == req_pos:
+                    # Si es la última cinta, entrega al camión
+                    if self.indice_cinta == len(self.cintas) - 1:  # Si es la última
+                        luigi.interactuar()
+                        self.activo = False
+                        self.fallado = False  # Entrega exitosa
                     else:
-                        self.caer(69)
-            return
-
-        # Interacción en la zona derecha (Mario)
-        # Detectamos si ha cruzado o llegado a la posición 167 (movimiento hacia la derecha)
-        if self.pos_x >= 167:
-            if self.pos_y in self.ALTURAS:
-                idx = self.ALTURAS.index(self.pos_y)
-
-                # Solo verificamos si es una cinta IMPAR (que mueve hacia la derecha)
-                if idx % 2 != 0:
-                    req_pos = (idx // 2) + 2
-
-                    if mario.posicion == req_pos:
-                        # Pasar al siguiente nivel
-                        self.pos_y = self.ALTURAS[idx + 1]
-                        self.pos_x = 154
+                        # Subir a la siguiente cinta
+                        self.cambiar_cinta()
+                        self.pos_x = 82
                         camion.sumar_puntos(1)
-                    else:
-                        self.caer(170)  # Mario no estaba
+                else:
+                    self.caer(69)
+            return
+
+        # 3. MOVIMIENTO HACIA LA DERECHA
+        if not cinta_actual.mueve_a_izquierda:  # Dirección 1
+            if self.pos_x >= 167:  # Detectar llegada a la derecha
+                req_pos = (self.indice_cinta // 2) + 1
+
+                if mario.posicion == req_pos:
+                    self.cambiar_cinta()
+                    self.pos_x = 154
+                    camion.sumar_puntos(1)
+                else:
+                    self.caer(170)
+
+    def cambiar_cinta(self):
+        # Método auxiliar para pasar a la siguiente cinta
+        if self.indice_cinta < len(self.cintas) - 1:
+            self.indice_cinta += 1
+            self.pos_y = self.cintas[self.indice_cinta].y  # Actualizamos la Y al subir de cinta
 
     def actualizarSprite(self):
         if self.cayendo:
             return
 
-        # Cambiar sprite según posición en la cinta
-        y = self.pos_y
-        x = self.pos_x
-        h = self.ALTURAS
+        # Usamos el índice de la cinta para decidir el color (sprite)
+        idx = self.indice_cinta
 
-        # Lógica para seleccionar el sprite correcto del banco de imágenes, dependiendo de la altura y posición
-        if y == h[0] and x >= 118:
-            self.u, self.v = 48, 0
-        elif (y == h[0] or y == h[1]) and x < 118:
-            self.u, self.v = 48, 16
-        elif (y == h[1] or y == h[2]) and x >= 118:
-            self.u, self.v = 48, 32
-        elif (y == h[2] or y == h[3]) and x < 118:
-            self.u, self.v = 64, 0
-        elif (y == h[3] or y == h[4]) and x >= 118:
-            self.u, self.v = 64, 16
+        # Lógica simplificada de sprites basada en índices
+        if idx == 0 or idx == 1:
+            self.u, self.v = (48, 0) if self.pos_x >= 118 else (48, 16)
+        elif idx == 2:
+            self.u, self.v = (48, 16) if self.pos_x < 118 else (48, 32)
+        elif idx == 3:
+            self.u, self.v = (48, 32) if self.pos_x >= 118 else (64, 0)
+        elif idx == 4:
+            self.u, self.v = (64, 0) if self.pos_x < 118 else (64, 16)
         else:
             self.u, self.v = 64, 32
 
@@ -119,13 +119,8 @@ class Paquete:
             return
 
         # Movimiento normal en las cintas (zigzag)
-        if self.pos_y in self.ALTURAS:
-            idx = self.ALTURAS.index(self.pos_y)
-            # Pares van hacia la derecha, impares a la izquierda
-            if idx % 2 == 0:
-                self.pos_x -= self.speed
-            else:
-                self.pos_x += self.speed
+        cinta_actual = self.cintas[self.indice_cinta]
+        self.pos_x += self.speed * cinta_actual.direccion
 
     def draw(self):
         pyxel.blt(self.pos_x, self.pos_y, 0, self.u, self.v, 16, 16, 0)
