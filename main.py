@@ -29,7 +29,7 @@ class App:
         # Cargar imagen de fondo en el banco de imágenes 1
         pyxel.images[1].load(0, 0, "./assets/fondo.png")
 
-        pyxel.sounds[2].set("c0e0g0c1", "p", "3567", "s", 25)
+        pyxel.sounds[2].set("c0e0g0c1", "p", "3567", "s", 50)
 
         self.cintas_juego = [Cinta(102, -1), Cinta(102, -1), Cinta(85, 1), Cinta(68, -1), Cinta(51, 1), Cinta(34, -1)]
         self.lista_paquetes = []
