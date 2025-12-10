@@ -104,7 +104,7 @@ class Paquete:
         elif idx == 4:
             self.u, self.v = (64, 0) if self.pos_x < 118 else (64, 16)
         else:
-            self.u, self.v = 64, 32
+            self.u, self.v = (64, 32) if self.pos_x <= 118 else (64, 16)
 
     def move(self):
         self.actualizarSprite()
