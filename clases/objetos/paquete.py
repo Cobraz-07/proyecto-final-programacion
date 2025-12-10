@@ -3,10 +3,11 @@ import pyxel
 
 class Paquete:
 
-    def __init__(self, cintas, velocidad):
-        # Recibimos la lista de objetos Cinta desde el Main
+    def __init__(self, cintas, velocidad, play_cambio_de_altura):
+        # Recibimos la lista de objetos Cinta desde el Main y la función del sonido
         self.cintas = cintas
         self.indice_cinta = 0  # Empezamos en la primera cinta (la de abajo)
+        self.play_cambio_de_altura = play_cambio_de_altura
 
         # Obtenemos la cinta actual
         cinta_actual = self.cintas[self.indice_cinta]
@@ -83,6 +84,7 @@ class Paquete:
 
     def cambiar_cinta(self):
         # Método auxiliar para pasar a la siguiente cinta
+        self.play_cambio_de_altura()  # Reproducir sonido de cambio de altura
         if self.indice_cinta < len(self.cintas) - 1:
             self.indice_cinta += 1
             self.pos_y = self.cintas[self.indice_cinta].y  # Actualizamos la Y al subir de cinta

@@ -30,9 +30,15 @@ class App:
         pyxel.images[1].load(0, 0, "./assets/fondo.png")
 
         self.cintas_juego = [Cinta(102, -1), Cinta(102, -1), Cinta(85, 1), Cinta(68, -1), Cinta(51, 1), Cinta(34, -1)]
-
         self.lista_paquetes = []
+
         pyxel.run(self.update, self.draw)
+
+    def play_regaño(self):
+        pyxel.playm(0, loop=False)
+
+    def play_cambio_de_altura(self):
+        pyxel.play(1, 1)
 
     def dibujar_texto_centrado(self, texto, y, color):
         # Calcula la posición X para centrar el texto
@@ -88,7 +94,7 @@ class App:
 
         # Generar paquetes nuevos periódicamente (máximo 3 en pantalla)
         if pyxel.frame_count % FRAMES_POR_PAQUETE == 0 and len(self.lista_paquetes) < 3:
-            self.lista_paquetes.append(Paquete(self.cintas_juego, VELOCIDAD_PAQUETES))
+            self.lista_paquetes.append(Paquete(self.cintas_juego, VELOCIDAD_PAQUETES, self.play_cambio_de_altura))
 
         # Actualizar paquetes existentes
         for paquete in self.lista_paquetes[:]:
@@ -102,6 +108,7 @@ class App:
                 else:
                     camion.registrar_fallo()  # Paquete fallido
                     jefe.aparecer(paquete.pos_x)  # Jefe regaña en la posición del fallo
+                    self.play_regaño()
 
                 self.lista_paquetes.remove(paquete)
 
