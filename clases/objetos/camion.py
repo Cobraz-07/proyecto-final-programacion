@@ -7,17 +7,18 @@ class Camion:
         self.pos_x = self.x_inicial
         self.pos_y = 54
 
-        # Estadísticas del juego
-        self._paquetes = 0  # Paquetes cargados actualmente
-        self._entregas = 0  # Viajes completados
+        # Control de puntuación y estado de juego
+        self._paquetes = 0
+        self._entregas = 0
         self._fallos = 0
         self._puntos = 0
 
+        # Control de animación de salida
         self.repartiendo = False
         self.timer_salida = 0
-        self.tiempo_espera = 30 * 5  # 5 segundos
+        self.tiempo_espera = 30 * 5
 
-    # --- PROPIEDADES (Getters) para leer los valores ---
+    # Propiedades de solo lectura
     @property
     def puntos(self):
         return self._puntos
@@ -34,7 +35,6 @@ class Camion:
     def paquetes(self):
         return self._paquetes
 
-    # --- MÉTODOS para modificar los valores de forma segura ---
     def cargar_paquete(self):
         self._paquetes += 1
 
@@ -45,43 +45,39 @@ class Camion:
         self._puntos += cantidad
 
     def update(self):
-        # Lógica de animación cuando el camión se va
+        # Anima la salida del camión hacia la izquierda
         if self.repartiendo:
             if self.timer_salida > 0:
                 self.timer_salida -= 1
-
-                # Movimiento hacia la izquierda
                 if self.pos_x > -60:
                     self.pos_x -= 2
             else:
                 self.finalizar_reparto()
 
     def iniciar_reparto(self):
-        # Comienza la secuencia de salida
+        # Comienza secuencia de salida y reproduce sonido
         self.repartiendo = True
         self.timer_salida = self.tiempo_espera
         pyxel.play(2, 2)
 
     def finalizar_reparto(self):
-        # Reinicia el camión y suma puntos
+        # Resetea camión, suma puntos y bonifica vidas cada 3 viajes
         self._entregas += 1
         self.sumar_puntos(10)
 
-        # Bonificación: limpia un fallo si existe
-        if self._fallos > 0:
-            self._fallos -= 1
+        if self._entregas == 3:
+            self._entregas = 0
+            if self._fallos > 0:
+                self._fallos -= 1
 
         self._paquetes = 0
         self.repartiendo = False
         self.pos_x = self.x_inicial
 
     def draw(self):
-        # Calcular sprite basado en lo lleno que está el camión
+        # Calcula sprite según carga o estado
         u = self.paquetes * 32
-
         if self.paquetes >= 8 or self.repartiendo:
-            # Sprite de camión lleno/saliendo
             pyxel.blt(self.pos_x, self.pos_y, 0, 0, 80, 32, 32, 1)
         else:
-            # Sprite de carga progresiva
             pyxel.blt(self.pos_x, self.pos_y, 0, u, 48, 32, 32, 1)
