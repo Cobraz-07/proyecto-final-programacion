@@ -101,7 +101,7 @@ class App:
         # Actualizar paquetes existentes
         for paquete in self.lista_paquetes[:]:
             paquete.move()
-            paquete.cambiarAltura(mario, luigi, camion)
+            paquete.cambiar_altura(mario, luigi, camion)
 
             # Gestión de paquetes inactivos (entregados o caídos)
             if not paquete.activo:

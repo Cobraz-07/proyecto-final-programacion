@@ -30,7 +30,7 @@ class Paquete:
         self.pos_x = x_destino
         self.cayendo = True
 
-    def cambiarAltura(self, mario, luigi, camion):
+    def cambiar_altura(self, mario, luigi, camion):
         # Si está cayendo, no puede interactuar
         if self.cayendo:
             return
